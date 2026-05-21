@@ -1,6 +1,9 @@
 ﻿using E_Commerce.Domain.Contracts;
+using E_Commerce.Domain.UnitOfWork;
 using E_Commerce.Persistence.Data.DataSeeding;
 using E_Commerce.Persistence.Data.DbContexts;
+using E_Commerce.Persistence.Data.UnitOfWork;
+using E_Commerce.Services.MappingProfiles;
 using Microsoft.EntityFrameworkCore;
 
 namespace E_Commerce.Web.Extensions
@@ -19,6 +22,8 @@ namespace E_Commerce.Web.Extensions
 				options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 			);
 			builder.Services.AddScoped<IDataInitializer, DataInitializer>();
+			builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+			builder.Services.AddAutoMapper(X => X.AddProfile<ProductProfile>());
 			return builder;
 
 		}
