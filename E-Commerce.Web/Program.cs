@@ -9,7 +9,8 @@ namespace E_Commerce.Web
 {
 	public class Program
 	{
-		public static void Main(string[] args)
+		//Most of Code inside main is implicitly async
+		public static async Task Main(string[] args)
 		{
 			var builder = WebApplication.CreateBuilder(args);
 
@@ -21,7 +22,10 @@ namespace E_Commerce.Web
 			#endregion
 
 			var app = builder.Build();
-			app.MigratePending().SeedDatabase();
+
+			#region Seeding Data
+			await app.InitializeAsync(); //Seeding and Migrations 
+			#endregion
 
 			#region Configure MiddleWares
 
@@ -40,7 +44,9 @@ namespace E_Commerce.Web
 			app.MapControllers(); //Search for controller with the same name as the request and execute the action method in that controller.
 			#endregion
 
-			app.Run();
+			//Async here is useless
+			//its the last thing to be done
+			await app.RunAsync();
 		}
 	}
 }

@@ -20,29 +20,29 @@ namespace E_Commerce.Persistence.Data.DataSeeding
 		{
 			_dbContext = dbContext;
 		}
-		public void Initialize()
+		public async Task InitializeAsync()
 		{
-			var hasProducts = _dbContext.Products.Any();
-			var hasBrands = _dbContext.ProductBrands.Any();
-			var hasTypes = _dbContext.ProductTypes.Any();
+			var hasProducts = await _dbContext.Products.AnyAsync();
+			var hasBrands =	await _dbContext.ProductBrands.AnyAsync();
+			var hasTypes = await _dbContext.ProductTypes.AnyAsync();
 			//must seed brands and types becuase products depend on them
 			try
 			{
 				if (!hasBrands)
 				{
 
-					LoadDataFromFile<int, ProductBrand>("brands.json", _dbContext.ProductBrands);
+					await LoadDataFromFileAsync<int, ProductBrand>("brands.json", _dbContext.ProductBrands);
 
 				}
 				if (!hasTypes)
 				{
-					LoadDataFromFile<int, ProductType>("types.json", _dbContext.ProductTypes);
+					await LoadDataFromFileAsync<int, ProductType>("types.json", _dbContext.ProductTypes);
 
 				}
 				_dbContext.SaveChanges();
 				if (!hasProducts)
 				{
-					LoadDataFromFile<int, Product>("products.json", _dbContext.Products);
+					await LoadDataFromFileAsync<int, Product>("products.json", _dbContext.Products);
 				}
 				_dbContext.SaveChanges();
 			}
@@ -55,7 +55,7 @@ namespace E_Commerce.Persistence.Data.DataSeeding
 
 		#region Helper Methods
 
-		private void LoadDataFromFile<TKey, T>(string fileName, DbSet<T> dbset) where T : BaseEntity<TKey>
+		private async Task LoadDataFromFileAsync<TKey, T>(string fileName, DbSet<T> dbset) where T : BaseEntity<TKey>
 		{
 			//Another way 
 			var filePath = $"..\\E-Commerce.Persistence\\Data\\DataSeeding\\Files\\{fileName}";
@@ -68,12 +68,14 @@ namespace E_Commerce.Persistence.Data.DataSeeding
 			{
 				using var dataStream = File.OpenRead(filePath);
 
-				var result = JsonSerializer.Deserialize<List<T>>(dataStream, new JsonSerializerOptions
+				var result = await JsonSerializer.DeserializeAsync<List<T>>(dataStream, new JsonSerializerOptions
 				{
 					PropertyNameCaseInsensitive = true
 				});
 
 				if (result is null || !result.Any()) return;
+				//AddRangeAsync will be better if want to call database before adding if identity was created by entity framework
+
 				dbset.AddRange(result!);
 
 			}
