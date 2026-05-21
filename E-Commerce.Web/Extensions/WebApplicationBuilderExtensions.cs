@@ -25,7 +25,7 @@ namespace E_Commerce.Web.Extensions
 			);
 			builder.Services.AddScoped<IDataInitializer, DataInitializer>();
 			builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-			builder.Services.AddAutoMapper(X => X.AddProfile<ProductProfile>());
+			builder.Services.AddAutoMapper(typeof(ServiceLayerReference).Assembly);
 			builder.Services.AddScoped<IProductService, ProductService>();
 			return builder;
 

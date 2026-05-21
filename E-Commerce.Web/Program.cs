@@ -36,8 +36,10 @@ namespace E_Commerce.Web
 				app.UseSwaggerUI();
 			}
 
-			app.UseHttpsRedirection();
 
+			app.UseHttpsRedirection();
+			//to serve static files inside wwwroot
+			app.UseStaticFiles();
 			app.UseAuthorization();
 
 

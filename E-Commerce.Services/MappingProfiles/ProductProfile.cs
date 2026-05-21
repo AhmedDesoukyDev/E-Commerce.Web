@@ -15,7 +15,8 @@ namespace E_Commerce.Services.MappingProfiles
 		{
 			CreateMap<Product, ProductDTO>()
 				.ForMember(dest => dest.ProductBrand, opts => opts.MapFrom(src => src.ProductBrand.Name))
-				.ForMember(dest => dest.ProductType, opts => opts.MapFrom(src => src.ProductType.Name));
+				.ForMember(dest => dest.ProductType, opts => opts.MapFrom(src => src.ProductType.Name))
+				.ForMember(dest => dest.PictureUrl, opts => opts.MapFrom<ProductPictureUrlResolver>());
 
 			CreateMap<ProductBrand, BrandDTO>();
 			CreateMap<ProductType, TypeDTO>();
