@@ -1,4 +1,5 @@
-﻿using E_Commerce.Domain.Entities;
+﻿using E_Commerce.Domain.Contracts;
+using E_Commerce.Domain.Entities;
 using E_Commerce.Domain.Repositories;
 using E_Commerce.Persistence.Data.DbContexts;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace E_Commerce.Persistence.Data.Repositories
 {
@@ -27,8 +29,12 @@ namespace E_Commerce.Persistence.Data.Repositories
 
 		public async Task<IEnumerable<TEntity>> GetAllAsync(/*Expression<Func<TEntity,bool>> condition = null!*/)
 			=> await _dbContext.Set<TEntity>().ToListAsync();
+
+		public async Task<IEnumerable<TEntity>> GetAllAsync(ISpecifications<TEntity, TKey> specifications)
+		{
 			
-		
+			return  await SpecificationEvaluator.CreateQuery(_dbContext.Set<TEntity>(), specifications).ToListAsync();
+		}
 
 		public async Task<TEntity?> GetByIdAsync(TKey id)=>await _dbContext.Set<TEntity>().FindAsync(id);
 		

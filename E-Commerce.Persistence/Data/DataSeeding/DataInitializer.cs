@@ -58,7 +58,7 @@ namespace E_Commerce.Persistence.Data.DataSeeding
 		private async Task LoadDataFromFileAsync<TKey, T>(string fileName, DbSet<T> dbset) where T : BaseEntity<TKey>
 		{
 			//Another way 
-			var filePath = $"..\\E-Commerce.Persistence\\Data\\DataSeeding\\Files\\{fileName}";
+			var filePath = @"..\E-Commerce.Persistence\Data\DataSeeding\Files\"+fileName;
 
 			//if data is large will take too much space in memory
 			//var Data = File.ReadAllText(filePath);
