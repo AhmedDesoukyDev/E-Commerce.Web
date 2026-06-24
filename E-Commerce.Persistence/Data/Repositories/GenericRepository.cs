@@ -37,7 +37,11 @@ namespace E_Commerce.Persistence.Data.Repositories
 		}
 
 		public async Task<TEntity?> GetByIdAsync(TKey id)=>await _dbContext.Set<TEntity>().FindAsync(id);
-		
+
+		public async Task<TEntity?> GetByIdAsync(ISpecifications<TEntity, TKey> specifications)
+		{
+			return await SpecificationEvaluator.CreateQuery(_dbContext.Set<TEntity>(), specifications).FirstOrDefaultAsync();
+		}
 
 		public void UpdateAsync(TEntity entity) => _dbContext.Set<TEntity>().Update(entity);
 	

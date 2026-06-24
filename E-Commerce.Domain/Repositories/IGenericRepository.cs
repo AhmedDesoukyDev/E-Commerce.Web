@@ -14,6 +14,7 @@ namespace E_Commerce.Domain.Repositories
 		Task<IEnumerable<TEntity>> GetAllAsync(ISpecifications<TEntity,TKey> specifications);
 
 		Task<TEntity?> GetByIdAsync(TKey id);
+		Task<TEntity?> GetByIdAsync(ISpecifications<TEntity,TKey> specifications);
 
 		Task AddAsync(TEntity entity); //incase we need to call database before adding
 

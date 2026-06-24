@@ -12,6 +12,10 @@ namespace E_Commerce.Domain.Contracts
 	{
 		//Get only so that whoever uses it wont reinitalize the collection
 		public ICollection<Expression<Func<TEntity, object>>> IncludeExpressions { get; }
-		
+		public Expression<Func<TEntity,bool>> Criteria { get; }
+		public Expression<Func<TEntity, object>> OrderBy { get; }
+		public Expression<Func<TEntity, object>> OrderByDesc { get; }
+
+
 	}
 }

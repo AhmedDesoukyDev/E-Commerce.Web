@@ -18,11 +18,23 @@ namespace E_Commerce.Persistence
 			IQueryable<TEntity> Query = EntryPoint;
 			if(specifications is not null )
 			{
+				if(specifications.Criteria is not null)
+				{
+					Query = Query.Where(specifications.Criteria);
+				}
 				if(specifications.IncludeExpressions is not null && specifications.IncludeExpressions.Any())
 				{
 					//Instead of foreach
 					Query = specifications.IncludeExpressions.Aggregate(Query, (currentQuery, IncludeExp) => currentQuery.Include(IncludeExp));
 
+				}
+				if(specifications.OrderBy is not null)
+				{
+					Query=Query.OrderBy(specifications.OrderBy);
+				}
+				if(specifications.OrderByDesc is not null)
+				{
+					Query = Query.OrderByDescending(specifications.OrderByDesc);
 				}
 			}
 			return Query;
